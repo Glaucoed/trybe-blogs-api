@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken');
 const { JWT_SECRET } = process.env;
 
 const jwtConfig = {
-  expiresIn: '1m',
+  expiresIn: '10h',
   algorithm: 'HS256',
 };
 
@@ -17,16 +17,11 @@ const generateToken = (payload) => {
 };
 
 const decodeToken = (token) => {
-  if (!token) {
-    throw new Error('Undefined Token');
-  }
-
   try {
     const result = jwt.verify(token, JWT_SECRET);
-    return result;
-  } catch (err) {
-    console.log(err.message);
-    throw new Error('Invalid assignature');
+    return { data: result };
+  } catch (error) {
+    return { message: error.message };
   }
 };
 

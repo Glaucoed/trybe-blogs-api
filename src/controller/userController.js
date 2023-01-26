@@ -6,9 +6,15 @@ const insertUser = async (req, res) => {
   if (validate) return res.status(400).json({ message: validate });
   if (message) return res.status(409).json({ message });
 
-  res.status(201).json({ token });
+  return res.status(201).json({ token });
+};
+
+const getAllUsers = async (req, res) => {
+  const data = await userService.getAllUsers();
+  return res.status(200).json(data);
 };
 
 module.exports = {
+  getAllUsers,
   insertUser,
 };
