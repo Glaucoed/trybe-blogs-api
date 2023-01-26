@@ -9,12 +9,22 @@ const insertUser = async (req, res) => {
   return res.status(201).json({ token });
 };
 
-const getAllUsers = async (req, res) => {
+const getAllUsers = async (_req, res) => {
   const data = await userService.getAllUsers();
   return res.status(200).json(data);
 };
 
+const getUser = async (req, res) => {
+  const { id } = req.params;
+  const data = await userService.getUser(id);
+
+  if (!data) return res.status(404).json({ message: 'User does not exist' });
+
+  return res.status(200).json(data);
+};
+
 module.exports = {
-  getAllUsers,
   insertUser,
+  getAllUsers,
+  getUser,
 };

@@ -18,7 +18,11 @@ const insertUser = async (newUser) => {
 
 const getAllUsers = async () => User.findAll({ attributes: { exclude: ['password'] } });
 
+const getUser = async (id) => User
+  .findOne({ where: { id }, attributes: { exclude: ['password'] } }); 
+
 module.exports = {
   getAllUsers,
   insertUser,
+  getUser,
 };
