@@ -1,8 +1,9 @@
 const router = require('express').Router();
-const userController = require('../controller/categoryController');
+const categoryController = require('../controller/categoryController');
 const auth = require('../middlewares/auth.middleware');
 const validateName = require('../middlewares/validateName.middleware');
 
-router.post('/', auth, validateName, userController.insertCategory);
+router.post('/', auth, validateName, categoryController.insertCategory);
+router.get('/', auth, categoryController.getAllCategories);
 
 module.exports = router;
