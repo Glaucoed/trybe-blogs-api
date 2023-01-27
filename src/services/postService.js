@@ -41,7 +41,23 @@ const insertPost = async (title, content, categoryIds, token) => {
   return data;
 };
 
+const findByIdPost = async (id) => {
+  const [data] = await BlogPost
+  .findAll({
+    where: { id },
+    attributes: { 
+      exclude: ['user_id'], 
+    },
+    include: [
+      { model: User, as: 'user', attributes: { exclude: ['password'] } },
+      { model: Category, as: 'categories', through: { attributes: [] } },
+    ],
+  });
+  return data;
+}; 
+
 module.exports = {
   getAllPosts,
   insertPost,
+  findByIdPost,
 };

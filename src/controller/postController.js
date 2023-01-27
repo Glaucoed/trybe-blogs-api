@@ -20,7 +20,15 @@ const insertPost = async (req, res) => {
   return res.status(201).json(result);
 };
 
+const findByIdPost = async (req, res) => {
+  const { id } = req.params;
+  const data = await postService.findByIdPost(id);
+  if (!data) return res.status(404).json({ message: 'Post does not exist' }); 
+  return res.status(200).send(data);
+};
+
 module.exports = {
   getAllPosts,
   insertPost,
+  findByIdPost,
 };

@@ -5,5 +5,6 @@ const validateFieldsPost = require('../middlewares/validateFieldsPost.middleware
 
 router.get('/', auth, postController.getAllPosts);
 router.post('/', validateFieldsPost, auth, postController.insertPost);
+router.get('/:id', auth, postController.findByIdPost);
 
 module.exports = router;
