@@ -1,4 +1,5 @@
 const categoryService = require('./categoryService');
+const { decodeToken } = require('../utils/jwt');
 
 const { Category, BlogPost, User, PostCategory } = require('../models');
 
@@ -56,8 +57,40 @@ const findByIdPost = async (id) => {
   return data;
 }; 
 
+const updatePost = async (id, authorization, newUpdate) => {
+  const getUser = await BlogPost.findByPk(id);
+
+  const { data: { email } } = decodeToken(authorization);
+
+  const userHasPermission = await User.findOne({ where: { email } });
+
+  if (userHasPermission.id !== getUser.userId) return { message: 'Unauthorized user' }; 
+
+  await BlogPost.update(newUpdate, { where: { id } });
+
+  const data = await findByIdPost(id);
+
+  return data;
+};
+
+const deletePost = async (id, authorization) => {
+  const getUser = await BlogPost.findByPk(id);
+  if (!getUser) return { message: 'Post does not exist' }; 
+  
+  const { data: { email } } = decodeToken(authorization);
+  
+  const userHasPermission = await User.findOne({ where: { email } });
+  
+  if (userHasPermission.id !== getUser.userId) return { permission: 'Unauthorized user' }; 
+  
+  await BlogPost.destroy({ where: { id } });
+  return { message: false, permission: false };
+};
+
 module.exports = {
   getAllPosts,
   insertPost,
   findByIdPost,
+  updatePost,
+  deletePost,
 };
