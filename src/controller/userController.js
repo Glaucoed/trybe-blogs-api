@@ -14,6 +14,13 @@ const getAllUsers = async (_req, res) => {
   return res.status(200).json(data);
 };
 
+const deleteMeUser = async (req, res) => {
+  const { authorization } = req.headers;
+
+  await userService.deleteMeUser(authorization);
+  res.status(204).end();
+};
+
 const getUser = async (req, res) => {
   const { id } = req.params;
   const data = await userService.getUser(id);
@@ -26,5 +33,6 @@ const getUser = async (req, res) => {
 module.exports = {
   insertUser,
   getAllUsers,
+  deleteMeUser,
   getUser,
 };
