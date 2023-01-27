@@ -10,7 +10,13 @@ const getAllCategories = async () => {
   return data;
 };
 
+const findByIdCategory = async (id) => {
+  const data = await Category.findByPk(id);
+  return data;
+};
+
 module.exports = {
   insertCategory,
   getAllCategories,
+  findByIdCategory,
 };

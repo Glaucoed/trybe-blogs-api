@@ -27,9 +27,11 @@ module.exports = {
       },
       published: {
         type: Sequelize.DATE,
+        defaultValue: new Date(),
       },
       updated: {
         type: Sequelize.DATE,
+        defaultValue: new Date(),
       }
     })
   },
