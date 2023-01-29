@@ -1,3 +1,4 @@
+const { Op } = require('sequelize');
 const categoryService = require('./categoryService');
 const { decodeToken } = require('../utils/jwt');
 
@@ -87,10 +88,29 @@ const deletePost = async (id, authorization) => {
   return { message: false, permission: false };
 };
 
+const getSearch = async (search) => {
+  const data = await BlogPost.findAll(
+    { where: {
+      [Op.or]: [
+        { title: { [Op.like]: `%${search}%` } },
+        { content: { [Op.like]: `%${search}%` } },
+      ],
+      
+    },
+    include: [
+      { model: User, as: 'user', attributes: { exclude: ['password'] } },
+      { model: Category, as: 'categories', through: { attributes: [] } },
+    ],
+},
+);
+  return data;
+};
+
 module.exports = {
   getAllPosts,
   insertPost,
   findByIdPost,
   updatePost,
   deletePost,
+  getSearch,
 };
