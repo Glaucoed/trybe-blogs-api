@@ -15,9 +15,7 @@ const getAllUsers = async (_req, res) => {
 };
 
 const deleteMeUser = async (req, res) => {
-  const { authorization } = req.headers;
-
-  await userService.deleteMeUser(authorization);
+   await userService.deleteMeUser(req.email);
   res.status(204).end();
 };
 

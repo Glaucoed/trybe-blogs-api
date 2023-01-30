@@ -18,8 +18,8 @@ const generateToken = (payload) => {
 
 const decodeToken = (token) => {
   try {
-    const result = jwt.verify(token, JWT_SECRET);
-    return { data: result };
+    const { email } = jwt.verify(token, JWT_SECRET);
+    return { email };
   } catch (error) {
     return { message: error.message };
   }

@@ -1,5 +1,5 @@
 const { User } = require('../models');
-const { generateToken, decodeToken } = require('../utils/jwt');
+const { generateToken } = require('../utils/jwt');
 const { validateUserFields } = require('../utils/validateJoi');
 
 const insertUser = async (newUser) => {
@@ -18,14 +18,14 @@ const insertUser = async (newUser) => {
 
 const getAllUsers = async () => User.findAll({ attributes: { exclude: ['password'] } });
 
-const deleteMeUser = async (auth) => {
-  const { data: { email } } = decodeToken(auth);
+const deleteMeUser = async (email) => {
   const { id } = await User.findOne({ where: { email } });
   await User.destroy({ where: { id } });
 };
 
-const getUser = async (id) => User
-  .findOne({ where: { id }, attributes: { exclude: ['password'] } }); 
+const getUser = async (id) => User.findOne(
+  { where: { id }, attributes: { exclude: ['password'] } },
+); 
 
 module.exports = {
   getAllUsers,

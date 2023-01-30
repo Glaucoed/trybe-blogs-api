@@ -1,6 +1,5 @@
 const { Op } = require('sequelize');
 const categoryService = require('./categoryService');
-const { decodeToken } = require('../utils/jwt');
 
 const { Category, BlogPost, User, PostCategory } = require('../models');
 
@@ -19,8 +18,8 @@ const getAllPosts = async () => {
   return data;
 };
 
-const insertPost = async (title, content, categoryIds, token) => {
-  const userId = await User.findOne({ where: { email: token } });
+const insertPost = async (title, content, categoryIds, email) => {
+  const userId = await User.findOne({ where: { email } });
 
   const resultPromisse = await Promise.all(categoryIds
     .map(async (category) => categoryService.findByIdCategory(category)));
@@ -58,10 +57,8 @@ const findByIdPost = async (id) => {
   return data;
 }; 
 
-const updatePost = async (id, authorization, newUpdate) => {
+const updatePost = async (id, email, newUpdate) => {
   const getUser = await BlogPost.findByPk(id);
-
-  const { data: { email } } = decodeToken(authorization);
 
   const userHasPermission = await User.findOne({ where: { email } });
 
@@ -74,11 +71,9 @@ const updatePost = async (id, authorization, newUpdate) => {
   return data;
 };
 
-const deletePost = async (id, authorization) => {
+const deletePost = async (id, email) => {
   const getUser = await BlogPost.findByPk(id);
   if (!getUser) return { message: 'Post does not exist' }; 
-  
-  const { data: { email } } = decodeToken(authorization);
   
   const userHasPermission = await User.findOne({ where: { email } });
   
